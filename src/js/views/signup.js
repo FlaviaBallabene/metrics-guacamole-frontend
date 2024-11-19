@@ -11,6 +11,7 @@ const [password, setPassword]= useState("")
 const navigate = useNavigate()
 const handleSubmit = async (e) =>{
   e.preventDefault()
+  console.log(firstName, lastName, email, password)
   let success = await actions.signup(firstName, lastName, email, password)
   if (success) {
     navigate("/login")
