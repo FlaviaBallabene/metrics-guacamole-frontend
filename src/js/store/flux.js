@@ -1,20 +1,21 @@
 const getState = ({ getStore, getActions, setStore }) => {
   return {
-    store: {},
+    store: {
+      roles: [],
+    },
     actions: {
       // Use getActions to call a function within a fuction
-      signup: async (firstName, lastName, email, password) => {
-		console.log(firstName, lastName, email, password)
+      signup: async (firstName, lastName, email, roleId) => {
         let options = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify( {
+          body: JSON.stringify({
             first_name: firstName,
             last_name: lastName,
             email: email,
-            password: password,
+            role_id: roleId,
           }), //key/value
         };
         let response = await fetch(
@@ -38,7 +39,7 @@ const getState = ({ getStore, getActions, setStore }) => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify( { email: email, password: password }), //key/value
+          body: JSON.stringify({ email: email, password: password }), //key/value
         };
         let response = await fetch(
           process.env.BACKEND_URL + "/api/login",
@@ -51,9 +52,19 @@ const getState = ({ getStore, getActions, setStore }) => {
         } else {
           let data = await response.json();
           console.log(data);
-		  sessionStorage.setItem("token", data.token)
+          sessionStorage.setItem("token", data.token);
           return true;
         }
+      },
+
+      getRoles: () => {
+        fetch(process.env.BACKEND_URL + "/api/roles")
+          .then((resp) => resp.json())
+          .then((data) => {
+            console.log(data);
+            setStore({ roles: data.roles });
+          })
+          .catch((error) => console.log(error));
       },
     },
   };
