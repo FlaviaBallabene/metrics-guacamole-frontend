@@ -2,6 +2,7 @@ const getState = ({ getStore, getActions, setStore }) => {
   return {
     store: {
       roles: [],
+      userData: null,
     },
     actions: {
       // Use getActions to call a function within a fuction
@@ -53,6 +54,7 @@ const getState = ({ getStore, getActions, setStore }) => {
           let data = await response.json();
           console.log(data);
           sessionStorage.setItem("token", data.token);
+          setStore({userData:data.user})
           return true;
         }
       },
